@@ -10,7 +10,7 @@ class Database {
             $port = getenv('DB_PORT');
             $dbname = getenv('DB_NAME');
             $user = getenv('DB_USER');
-            $pass = getenv('DB_PASS');
+            $pass = getenv('DB_PASSWORD');
 
             $this->conn = new PDO(
                 "pgsql:host=$host;port=$port;dbname=$dbname",
