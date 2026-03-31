@@ -1,4 +1,4 @@
-# INF653 Quotes API Midterm Project
+# INF653 Quotes API Midterm Project Reyes Sanchez
 
 ## Project URL
 https://inf653-quotes-api-midterm.onrender.com/api
