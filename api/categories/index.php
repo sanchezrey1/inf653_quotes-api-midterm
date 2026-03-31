@@ -27,7 +27,7 @@ if ($method === 'GET') {
             $row = $result->fetch(PDO::FETCH_ASSOC);
 
             echo json_encode(array(
-                'id' => $row['id'],
+                'id' => (int)$row['id'],
                 'category' => $row['category']
             ));
         } else {
@@ -35,7 +35,7 @@ if ($method === 'GET') {
 
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 $categories_arr[] = array(
-                    'id' => $row['id'],
+                    'id' => (int)$row['id'],
                     'category' => $row['category']
                 );
             }
@@ -97,7 +97,7 @@ if ($method === 'DELETE') {
     $result = $category->delete();
 
     if ($result) {
-        echo json_encode($result);
+        echo json_encode(array('id' => (int)$category->id));
     } else {
         echo json_encode(array('message' => 'category_id Not Found'));
     }

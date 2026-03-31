@@ -27,7 +27,7 @@ if ($method === 'GET') {
             $row = $result->fetch(PDO::FETCH_ASSOC);
 
             echo json_encode(array(
-                'id' => $row['id'],
+                'id' => (int)$row['id'],
                 'author' => $row['author']
             ));
         } else {
@@ -35,7 +35,7 @@ if ($method === 'GET') {
 
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 $authors_arr[] = array(
-                    'id' => $row['id'],
+                    'id' => (int)$row['id'],
                     'author' => $row['author']
                 );
             }
@@ -97,7 +97,7 @@ if ($method === 'DELETE') {
     $result = $author->delete();
 
     if ($result) {
-        echo json_encode($result);
+        echo json_encode(array('id' => (int)$author->id));
     } else {
         echo json_encode(array('message' => 'author_id Not Found'));
     }
