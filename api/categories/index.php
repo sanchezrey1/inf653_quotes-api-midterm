@@ -23,16 +23,25 @@ if ($method === 'GET') {
     $result = $category->read($id);
 
     if ($result->rowCount() > 0) {
-        $categories_arr = array();
+        if ($id !== null) {
+            $row = $result->fetch(PDO::FETCH_ASSOC);
 
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $categories_arr[] = array(
+            echo json_encode(array(
                 'id' => $row['id'],
                 'category' => $row['category']
-            );
-        }
+            ));
+        } else {
+            $categories_arr = array();
 
-        echo json_encode($categories_arr);
+            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                $categories_arr[] = array(
+                    'id' => $row['id'],
+                    'category' => $row['category']
+                );
+            }
+
+            echo json_encode($categories_arr);
+        }
     } else {
         echo json_encode(array('message' => 'category_id Not Found'));
     }
@@ -74,8 +83,9 @@ if ($method === 'PUT') {
     } else {
         echo json_encode(array('message' => 'category_id Not Found'));
     }
+}
 
-    if ($method === 'DELETE') {
+if ($method === 'DELETE') {
     $data = json_decode(file_get_contents("php://input"));
 
     if (!isset($data->id)) {
@@ -91,6 +101,5 @@ if ($method === 'PUT') {
     } else {
         echo json_encode(array('message' => 'category_id Not Found'));
     }
-  }
 }
 ?>

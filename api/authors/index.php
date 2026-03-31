@@ -23,16 +23,25 @@ if ($method === 'GET') {
     $result = $author->read($id);
 
     if ($result->rowCount() > 0) {
-        $authors_arr = array();
+        if ($id !== null) {
+            $row = $result->fetch(PDO::FETCH_ASSOC);
 
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $authors_arr[] = array(
+            echo json_encode(array(
                 'id' => $row['id'],
                 'author' => $row['author']
-            );
-        }
+            ));
+        } else {
+            $authors_arr = array();
 
-        echo json_encode($authors_arr);
+            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                $authors_arr[] = array(
+                    'id' => $row['id'],
+                    'author' => $row['author']
+                );
+            }
+
+            echo json_encode($authors_arr);
+        }
     } else {
         echo json_encode(array('message' => 'author_id Not Found'));
     }
@@ -74,8 +83,9 @@ if ($method === 'PUT') {
     } else {
         echo json_encode(array('message' => 'author_id Not Found'));
     }
+}
 
-    if ($method === 'DELETE') {
+if ($method === 'DELETE') {
     $data = json_decode(file_get_contents("php://input"));
 
     if (!isset($data->id)) {
@@ -91,6 +101,5 @@ if ($method === 'PUT') {
     } else {
         echo json_encode(array('message' => 'author_id Not Found'));
     }
-  }
 }
 ?>
