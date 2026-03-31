@@ -22,29 +22,46 @@ if ($method === 'GET') {
     $author_id = isset($_GET['author_id']) ? $_GET['author_id'] : null;
     $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : null;
 
-    if ($id !== null || $author_id !== null || $category_id !== null) {
-        $result = $quote->read_filtered($id, $author_id, $category_id);
-    } else {
-        $result = $quote->read();
-    }
+    if ($id !== null) {
+        $result = $quote->read_filtered($id, null, null);
 
-    if ($result->rowCount() > 0) {
-        $quotes_arr = array();
+        if ($result->rowCount() > 0) {
+            $row = $result->fetch(PDO::FETCH_ASSOC);
 
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $quote_item = array(
+            echo json_encode(array(
                 'id' => $row['id'],
                 'quote' => $row['quote'],
                 'author' => $row['author'],
                 'category' => $row['category']
-            );
-
-            $quotes_arr[] = $quote_item;
+            ));
+        } else {
+            echo json_encode(array('message' => 'No Quotes Found'));
+        }
+    } else {
+        if ($author_id !== null || $category_id !== null) {
+            $result = $quote->read_filtered(null, $author_id, $category_id);
+        } else {
+            $result = $quote->read();
         }
 
-        echo json_encode($quotes_arr);
-    } else {
-        echo json_encode(array('message' => 'No Quotes Found'));
+        if ($result->rowCount() > 0) {
+            $quotes_arr = array();
+
+            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                $quote_item = array(
+                    'id' => $row['id'],
+                    'quote' => $row['quote'],
+                    'author' => $row['author'],
+                    'category' => $row['category']
+                );
+
+                $quotes_arr[] = $quote_item;
+            }
+
+            echo json_encode($quotes_arr);
+        } else {
+            echo json_encode(array('message' => 'No Quotes Found'));
+        }
     }
 }
 
@@ -114,8 +131,9 @@ if ($method === 'PUT') {
     } else {
         echo json_encode(array('message' => 'No Quotes Found'));
     }
+}
 
-    if ($method === 'DELETE') {
+if ($method === 'DELETE') {
     $data = json_decode(file_get_contents("php://input"));
 
     if (!isset($data->id)) {
@@ -131,6 +149,5 @@ if ($method === 'PUT') {
     } else {
         echo json_encode(array('message' => 'No Quotes Found'));
     }
-  }
 }
 ?>
